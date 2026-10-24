@@ -35,4 +35,19 @@ public class ChatService
 
         return result.Value.Content[0].Text;
     }
+
+    /// <summary>
+    /// Describes a picture. gpt-5-mini can read images as well as text,
+    /// so the picture is sent along with the question.
+    /// </summary>
+    public async Task<string> DescribeImageAsync(BinaryData image, string contentType)
+    {
+        var result = await _chat.CompleteChatAsync(
+            new UserChatMessage(
+                ChatMessageContentPart.CreateTextPart(
+                    "Beschreibe dieses Bild in zwei bis drei Saetzen auf Deutsch."),
+                ChatMessageContentPart.CreateImagePart(image, contentType)));
+
+        return result.Value.Content[0].Text;
+    }
 }

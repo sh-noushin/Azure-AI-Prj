@@ -13,6 +13,13 @@ export interface TextAnalysis {
   entities: { text: string; category: string }[];
 }
 
+/** What the Vision page gets back. */
+export interface VisionAnalysis {
+  description: string;
+  textLines: string[];
+  tags: { name: string; confidence: number }[];
+}
+
 /** One place for every call to the C# API. */
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -54,6 +61,14 @@ export class ApiService {
     return firstValueFrom(
       this.http.post<TextAnalysis>(`${this.baseUrl}/language`, { text })
     );
+  }
+
+  /** Describe a picture, read its text and list what is in it. */
+  vision(file: File): Promise<VisionAnalysis> {
+    const form = new FormData();
+    form.append('file', file);
+
+    return firstValueFrom(this.http.post<VisionAnalysis>(`${this.baseUrl}/vision`, form));
   }
 
   /** Ask a question about the uploaded document. */

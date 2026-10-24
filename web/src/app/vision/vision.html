@@ -1,0 +1,38 @@
+<app-feature-card
+  title="Bildanalyse"
+  hint="gpt-5-mini beschreibt das Bild, der Vision-Dienst liest den Text darin und erkennt, was zu sehen ist.">
+
+  <input type="file" accept="image/*" (change)="analyse($event)" [disabled]="loading()" />
+
+  @if (preview()) {
+    <img class="preview" [src]="preview()" alt="Hochgeladenes Bild" />
+  }
+
+  @if (loading()) {
+    <p class="hint">Einen Moment …</p>
+  }
+
+  <app-error-message [message]="error()" />
+
+  @if (result(); as r) {
+    <app-answer-box label="Beschreibung" [text]="r.description" />
+
+    <div class="sources">
+      <h3>Text im Bild</h3>
+      @for (line of r.textLines; track $index) {
+        <p class="source">{{ line }}</p>
+      } @empty {
+        <p class="hint">Kein Text gefunden.</p>
+      }
+
+      <h3>Erkannt</h3>
+      <div class="tags">
+        @for (tag of r.tags; track tag.name) {
+          <span class="tag">{{ tag.name }} <em>{{ tag.confidence }}</em></span>
+        } @empty {
+          <p class="hint">Nichts erkannt.</p>
+        }
+      </div>
+    </div>
+  }
+</app-feature-card>

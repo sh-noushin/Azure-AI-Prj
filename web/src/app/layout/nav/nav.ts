@@ -13,5 +13,6 @@ export class Nav {
     { path: '/embeddings', label: 'Ähnlichkeit' },
     { path: '/rag', label: 'Eigenes Dokument' },
     { path: '/language', label: 'Textanalyse' },
+    { path: '/vision', label: 'Bildanalyse' },
   ];
 }
