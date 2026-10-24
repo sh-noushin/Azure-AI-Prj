@@ -4,15 +4,17 @@
 
   <textarea rows="3" [(ngModel)]="text" placeholder="Text eingeben …"></textarea>
 
-  <select [(ngModel)]="target">
-    @for (language of languages(); track language.code) {
-      <option [value]="language.code">{{ language.label }}</option>
-    }
-  </select>
+  <div class="controls">
+    <select [(ngModel)]="target">
+      @for (language of languages(); track language.code) {
+        <option [value]="language.code">{{ language.label }}</option>
+      }
+    </select>
 
-  <button (click)="translate()" [disabled]="loading() || !text().trim()">
-    {{ loading() ? 'Einen Moment …' : 'Übersetzen' }}
-  </button>
+    <button (click)="translate()" [disabled]="loading() || !text().trim()">
+      {{ loading() ? 'Einen Moment …' : 'Übersetzen' }}
+    </button>
+  </div>
 
   <app-error-message [message]="error()" />
   <app-answer-box label="Übersetzung" [text]="result()" />

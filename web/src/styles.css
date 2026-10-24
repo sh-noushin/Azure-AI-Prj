@@ -188,6 +188,14 @@ main > *:not(router-outlet) > app-error-message {
   display: block;
 }
 
+/* Controls that sit on one line, e.g. a dropdown next to a button. */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
 /* Side by side once there is room; stacked on narrow screens. */
 .split {
   display: grid;

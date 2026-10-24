@@ -4,15 +4,17 @@
 
   <textarea rows="3" [(ngModel)]="text" placeholder="Was soll vorgelesen werden?"></textarea>
 
-  <select [(ngModel)]="voice">
-    @for (option of voices(); track option.id) {
-      <option [value]="option.id">{{ option.label }}</option>
-    }
-  </select>
+  <div class="controls">
+    <select [(ngModel)]="voice">
+      @for (option of voices(); track option.id) {
+        <option [value]="option.id">{{ option.label }}</option>
+      }
+    </select>
 
-  <button (click)="speak()" [disabled]="speaking() || !text().trim()">
-    {{ speaking() ? 'Einen Moment …' : 'Vorlesen' }}
-  </button>
+    <button (click)="speak()" [disabled]="speaking() || !text().trim()">
+      {{ speaking() ? 'Einen Moment …' : 'Vorlesen' }}
+    </button>
+  </div>
 
   @if (audioUrl()) {
     <audio class="player" [src]="audioUrl()" controls autoplay></audio>

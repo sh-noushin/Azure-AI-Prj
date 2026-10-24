@@ -9,6 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 AzureAiSettings settings = builder.Configuration.GetSection("AzureAi").Get<AzureAiSettings>()
     ?? throw new InvalidOperationException("Section 'AzureAi' is missing from appsettings.json.");
 
+// Fail at startup with a clear message rather than on the first request with a 401.
+if (string.IsNullOrWhiteSpace(settings.OpenAiEndpoint) || string.IsNullOrWhiteSpace(settings.ServicesEndpoint))
+{
+    throw new InvalidOperationException(
+        "Azure endpoints are not configured. Copy api/appsettings.Development.Example.json to "
+        + "api/appsettings.Development.json and fill in your own values, or set AZURE_OPENAI_ENDPOINT "
+        + "and AZURE_SERVICES_ENDPOINT in .env when running with Docker.");
+}
+
 builder.Services.AddSingleton(settings);
 
 // ---------- services (one per Azure AI feature) ----------
