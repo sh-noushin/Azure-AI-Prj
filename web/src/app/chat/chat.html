@@ -1,0 +1,25 @@
+<section class="card">
+  <h2>Chat</h2>
+  <p class="hint">Stellen Sie eine Frage an das Modell <code>gpt-5-mini</code>.</p>
+
+  <textarea
+    rows="3"
+    placeholder="Was ist eine digitale Signatur?"
+    [(ngModel)]="question"
+    (keydown.control.enter)="ask()"></textarea>
+
+  <button (click)="ask()" [disabled]="loading() || !question().trim()">
+    {{ loading() ? 'Einen Moment …' : 'Fragen' }}
+  </button>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  @if (answer()) {
+    <div class="answer">
+      <h3>Antwort</h3>
+      <p>{{ answer() }}</p>
+    </div>
+  }
+</section>
