@@ -1,10 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../api.service';
+import { AnswerBox } from '../shared/answer-box/answer-box';
+import { ErrorMessage } from '../shared/error-message/error-message';
+import { FeatureCard } from '../shared/feature-card/feature-card';
 
+/** Ask the chat model a question. */
 @Component({
   selector: 'app-chat',
-  imports: [FormsModule],
+  imports: [FormsModule, FeatureCard, AnswerBox, ErrorMessage],
   templateUrl: './chat.html',
 })
 export class Chat {

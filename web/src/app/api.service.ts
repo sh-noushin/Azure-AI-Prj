@@ -14,4 +14,14 @@ export class ApiService {
       this.http.post<{ answer: string }>(`${this.baseUrl}/chat`, { question })
     );
   }
+
+  /** Compare two texts by meaning. */
+  similarity(first: string, second: string): Promise<{ similarity: number; dimensions: number }> {
+    return firstValueFrom(
+      this.http.post<{ similarity: number; dimensions: number }>(
+        `${this.baseUrl}/similarity`,
+        { first, second }
+      )
+    );
+  }
 }

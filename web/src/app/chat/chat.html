@@ -1,6 +1,6 @@
-<section class="card">
-  <h2>Chat</h2>
-  <p class="hint">Stellen Sie eine Frage an das Modell <code>gpt-5-mini</code>.</p>
+<app-feature-card
+  title="Chat"
+  hint="Stellen Sie eine Frage an das Modell gpt-5-mini.">
 
   <textarea
     rows="3"
@@ -12,14 +12,6 @@
     {{ loading() ? 'Einen Moment …' : 'Fragen' }}
   </button>
 
-  @if (error()) {
-    <p class="error">{{ error() }}</p>
-  }
-
-  @if (answer()) {
-    <div class="answer">
-      <h3>Antwort</h3>
-      <p>{{ answer() }}</p>
-    </div>
-  }
-</section>
+  <app-error-message [message]="error()" />
+  <app-answer-box [text]="answer()" />
+</app-feature-card>

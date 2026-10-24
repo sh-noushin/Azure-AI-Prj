@@ -1,0 +1,22 @@
+<app-feature-card
+  title="Ähnlichkeit"
+  hint="text-embedding-3-small verwandelt Text in Zahlen. So lässt sich Bedeutung vergleichen, nicht nur Schreibweise.">
+
+  <input [(ngModel)]="first" placeholder="Erster Text" />
+  <input [(ngModel)]="second" placeholder="Zweiter Text" />
+
+  <button (click)="compare()" [disabled]="loading()">
+    {{ loading() ? 'Einen Moment …' : 'Vergleichen' }}
+  </button>
+
+  <app-error-message [message]="error()" />
+
+  @if (similarity() !== null) {
+    <div class="answer">
+      <h3>Ergebnis</h3>
+      <div class="bar"><span [style.width.%]="percent()"></span></div>
+      <p><strong>{{ similarity() }}</strong> — {{ verdict() }}</p>
+      <p class="hint">Jeder Text wurde in {{ dimensions() }} Zahlen umgewandelt.</p>
+    </div>
+  }
+</app-feature-card>
