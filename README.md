@@ -106,6 +106,31 @@ The frontend uses standalone components, signals and zoneless change
 detection. There are no layers and no domain model: every page takes input,
 calls Azure and shows the answer.
 
+## Rules and limits
+
+There is no business domain here: every page takes input, calls Azure and
+shows the answer. What the app does have are limits and a few deliberate
+behaviours, all enforced in the endpoint files.
+
+| Feature | Rule |
+|---|---|
+| Chat | The whole conversation is sent with every question, because the model keeps no memory between calls |
+| Ähnlichkeit | Both texts are required; the score is cosine similarity between two 1536-number vectors |
+| Eigenes Dokument | Upload at most 200 KB of text; it is cut into pieces of about 700 characters, and the 3 closest to the question are used |
+| Eigenes Dokument | The model is told to answer **only** from those pieces and to reply "Das steht nicht im Dokument." otherwise, rather than guessing |
+| Textanalyse | At most 5000 characters per call, which is the Language service limit |
+| Bildanalyse | JPEG, PNG, WebP or GIF, at most 4 MB; tags below 0.7 confidence are dropped as noise |
+| Bildanalyse | The description comes from `gpt-5-mini`, not from Vision, because captions are unavailable in Sweden Central |
+| Sprache | At most 1000 characters to read aloud; uploads must be WAV and at most 10 MB |
+| Übersetzen | At most 5000 characters; the source language is detected, only the target is chosen |
+| Sprachassistent | At most 10 MB of audio; the model is told to answer in three short sentences, since the reply is read aloud |
+| Sprachassistent | Silence returns a friendly prompt rather than an error |
+
+Two things are deliberately **not** handled, because this is a learning project
+and not a product: the uploaded document lives in memory and is lost when the
+API restarts, and there is no sign-in, so the app must not be put on a public
+URL without one.
+
 ## If something goes wrong
 
 | Symptom | Cause |
