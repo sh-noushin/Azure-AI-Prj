@@ -32,10 +32,8 @@ public class TranslationService(AzureAiSettings settings, IHttpClientFactory htt
 
     public async Task<TranslationResult> TranslateAsync(string text, string to)
     {
-        AccessToken token = await _credential.GetTokenAsync(new TokenRequestContext(Scope), CancellationToken.None);
-
         HttpClient client = httpClientFactory.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
+        await AuthenticateAsync(client);
 
         string url = $"{settings.ServicesEndpoint.TrimEnd('/')}/translator/text/v3.0/translate?api-version=3.0&to={to}";
         HttpResponseMessage response = await client.PostAsJsonAsync(url, new[] { new { Text = text } });
@@ -47,6 +45,20 @@ public class TranslationService(AzureAiSettings settings, IHttpClientFactory htt
         return new TranslationResult(
             first?.Translations.FirstOrDefault()?.Text ?? "",
             first?.DetectedLanguage?.Language ?? "");
+    }
+
+    /// <summary>Adds either the API key or an az login token to the request.</summary>
+    private async Task AuthenticateAsync(HttpClient client)
+    {
+        if (settings.UseApiKey)
+        {
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", settings.ApiKey);
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Region", settings.Region);
+            return;
+        }
+
+        AccessToken token = await _credential.GetTokenAsync(new TokenRequestContext(Scope), CancellationToken.None);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
     }
 
     /// <summary>The shape the Translator REST API answers with.</summary>

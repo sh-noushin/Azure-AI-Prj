@@ -1,5 +1,6 @@
 using AiApp.Configuration;
 using AiApp.Models;
+using Azure;
 using Azure.AI.Vision.ImageAnalysis;
 using Azure.Identity;
 
@@ -14,8 +15,9 @@ public class VisionService(AzureAiSettings settings, ChatService chat)
     /// <summary>Tags below this confidence are noise.</summary>
     private const float MinimumConfidence = 0.7f;
 
-    private readonly ImageAnalysisClient _vision =
-        new(new Uri(settings.ServicesEndpoint), new DefaultAzureCredential());
+    private readonly ImageAnalysisClient _vision = settings.UseApiKey
+        ? new(new Uri(settings.ServicesEndpoint), new AzureKeyCredential(settings.ApiKey))
+        : new(new Uri(settings.ServicesEndpoint), new DefaultAzureCredential());
 
     public async Task<VisionResult> AnalyseAsync(BinaryData image, string contentType)
     {

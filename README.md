@@ -19,7 +19,33 @@ stays short.
 | Übersetzen | Translator | Translate into seven languages |
 | Sprachassistent | Speech + chat | Speak a question, hear the answer |
 
-## What you need
+## Running it with Docker (nothing else to install)
+
+The quickest way to try the app. You need **only Docker** &mdash; the images bring
+.NET and Node with them.
+
+```bash
+git clone https://github.com/sh-noushin/Azure-AI-Prj.git
+cd Azure-AI-Prj
+
+cp .env.example .env     # then fill in your Azure values
+docker compose up
+```
+
+Open <http://localhost:8088>. Stop it with `Ctrl+C`, or `docker compose down`.
+
+`.env` needs an **API key** from the Azure portal (your AI Services resource,
+*Keys and Endpoint*) together with the two endpoints and your deployment names.
+A key is used here rather than `az login`, because a container has no login
+session of its own. `.env` is git-ignored, so the key stays on your machine.
+
+If port 8088 is taken, set `WEB_PORT=9090` in `.env`.
+
+## Running it without Docker
+
+Useful while developing, because both parts reload as you edit.
+
+
 
 - .NET 10 SDK
 - Node 20 or newer
@@ -29,7 +55,8 @@ stays short.
 
 ## Running it
 
-Sign in once. Everything authenticates through this session.
+Sign in once. With no API key configured the app uses this session instead,
+so nothing secret is stored.
 
 ```bash
 az login
@@ -51,6 +78,17 @@ npx ng serve        # http://localhost:4200
 ```
 
 Open http://localhost:4200.
+
+## How the two ways authenticate
+
+| | Running locally | Running in Docker |
+|---|---|---|
+| Identity | your `az login` session | the API key from `.env` |
+| Code | `DefaultAzureCredential` | `AzureKeyCredential` |
+| Chosen by | `AzureAi:ApiKey` being empty | `AzureAi:ApiKey` being set |
+
+Every service checks the same setting, so the switch happens in one place per
+service and no code changes between the two.
 
 ## Settings
 

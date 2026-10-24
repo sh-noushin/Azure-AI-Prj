@@ -1,5 +1,6 @@
 using AiApp.Configuration;
 using AiApp.Models;
+using Azure;
 using Azure.AI.TextAnalytics;
 using Azure.Identity;
 
@@ -15,8 +16,9 @@ public class LanguageService
 
     public LanguageService(AzureAiSettings settings)
     {
-        // Same az login as chat: the Language service accepts it too, so no API key.
-        _client = new TextAnalyticsClient(new Uri(settings.ServicesEndpoint), new DefaultAzureCredential());
+        _client = settings.UseApiKey
+            ? new TextAnalyticsClient(new Uri(settings.ServicesEndpoint), new AzureKeyCredential(settings.ApiKey))
+            : new TextAnalyticsClient(new Uri(settings.ServicesEndpoint), new DefaultAzureCredential());
     }
 
     public async Task<TextAnalysisResult> AnalyseAsync(string text)

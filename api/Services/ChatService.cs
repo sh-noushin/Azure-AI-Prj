@@ -1,5 +1,6 @@
 using AiApp.Configuration;
 using AiApp.Models;
+using Azure;
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using OpenAI.Chat;
@@ -13,8 +14,11 @@ public class ChatService
 
     public ChatService(AzureAiSettings settings)
     {
-        // DefaultAzureCredential uses your "az login" session, so there is no API key.
-        AzureOpenAIClient azure = new(new Uri(settings.OpenAiEndpoint), new DefaultAzureCredential());
+        // With a key, use it; otherwise fall back to the local "az login" session.
+        AzureOpenAIClient azure = settings.UseApiKey
+            ? new(new Uri(settings.OpenAiEndpoint), new AzureKeyCredential(settings.ApiKey))
+            : new(new Uri(settings.OpenAiEndpoint), new DefaultAzureCredential());
+
         _chat = azure.GetChatClient(settings.ChatDeployment);
     }
 

@@ -1,4 +1,5 @@
 using AiApp.Configuration;
+using Azure;
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using OpenAI.Embeddings;
@@ -15,7 +16,10 @@ public class EmbeddingService
 
     public EmbeddingService(AzureAiSettings settings)
     {
-        AzureOpenAIClient azure = new(new Uri(settings.OpenAiEndpoint), new DefaultAzureCredential());
+        AzureOpenAIClient azure = settings.UseApiKey
+            ? new(new Uri(settings.OpenAiEndpoint), new AzureKeyCredential(settings.ApiKey))
+            : new(new Uri(settings.OpenAiEndpoint), new DefaultAzureCredential());
+
         _embeddings = azure.GetEmbeddingClient(settings.EmbeddingDeployment);
     }
 

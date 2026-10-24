@@ -65,11 +65,16 @@ public class SpeechService(AzureAiSettings settings)
     }
 
     /// <summary>
-    /// Builds the connection. The custom subdomain lets the Speech service accept the same
-    /// az login token as the other features, so no API key is needed.
+    /// Builds the connection. With a key the region is enough; otherwise the resource's custom
+    /// subdomain is used, which accepts the same az login token as the other features.
     /// </summary>
     private async Task<SpeechConfig> CreateConfigAsync()
     {
+        if (settings.UseApiKey)
+        {
+            return SpeechConfig.FromSubscription(settings.ApiKey, settings.Region);
+        }
+
         AccessToken token = await _credential.GetTokenAsync(new TokenRequestContext(Scope), CancellationToken.None);
         SpeechConfig config = SpeechConfig.FromEndpoint(new Uri(settings.ServicesEndpoint));
         config.AuthorizationToken = token.Token;
