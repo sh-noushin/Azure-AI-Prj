@@ -11,5 +11,6 @@ export class Nav {
   readonly links = [
     { path: '/chat', label: 'Chat' },
     { path: '/embeddings', label: 'Ähnlichkeit' },
+    { path: '/rag', label: 'Eigenes Dokument' },
   ];
 }

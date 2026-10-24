@@ -22,4 +22,17 @@ public class ChatService
         var result = await _chat.CompleteChatAsync(new UserChatMessage(question));
         return result.Value.Content[0].Text;
     }
+
+    /// <summary>
+    /// Asks with an extra instruction that tells the model how to behave,
+    /// for example "answer only from this text".
+    /// </summary>
+    public async Task<string> AskAsync(string instruction, string question)
+    {
+        var result = await _chat.CompleteChatAsync(
+            new SystemChatMessage(instruction),
+            new UserChatMessage(question));
+
+        return result.Value.Content[0].Text;
+    }
 }

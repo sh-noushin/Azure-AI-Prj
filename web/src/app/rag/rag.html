@@ -1,0 +1,34 @@
+<app-feature-card
+  title="Eigenes Dokument"
+  hint="Laden Sie eine Text- oder Markdown-Datei hoch. Antworten kommen ausschliesslich aus dieser Datei.">
+
+  <input type="file" accept=".txt,.md" (change)="upload($event)" [disabled]="uploading()" />
+
+  @if (documentName()) {
+    <p class="hint">
+      Geladen: <strong>{{ documentName() }}</strong> — in {{ chunkCount() }} Abschnitte zerlegt.
+    </p>
+
+    <textarea
+      rows="2"
+      placeholder="Was steht in dem Dokument?"
+      [(ngModel)]="question"
+      (keydown.control.enter)="ask()"></textarea>
+
+    <button (click)="ask()" [disabled]="asking() || !question().trim()">
+      {{ asking() ? 'Einen Moment …' : 'Fragen' }}
+    </button>
+  }
+
+  <app-error-message [message]="error()" />
+  <app-answer-box [text]="answer()" />
+
+  @if (sources().length) {
+    <div class="sources">
+      <h3>Verwendete Abschnitte</h3>
+      @for (source of sources(); track $index) {
+        <p class="source">{{ source }}</p>
+      }
+    </div>
+  }
+</app-feature-card>

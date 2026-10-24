@@ -94,3 +94,29 @@ input:not([type]) {
   background: #0b5fff;
   transition: width 0.3s;
 }
+
+input[type='file'] {
+  margin-bottom: 0.6rem;
+  font: inherit;
+}
+
+.sources {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e3e5ea;
+}
+
+.sources h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: #5b5f6b;
+}
+
+.source {
+  margin: 0 0 0.5rem;
+  padding: 0.6rem;
+  font-size: 0.85rem;
+  color: #3b3f4b;
+  background: #f4f6fa;
+  border-radius: 0.4rem;
+}

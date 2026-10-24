@@ -24,4 +24,27 @@ export class ApiService {
       )
     );
   }
+
+  /** Upload a document for the "ask your own file" page. */
+  ragUpload(file: File): Promise<{ documentName: string; chunkCount: number }> {
+    const form = new FormData();
+    form.append('file', file);
+
+    return firstValueFrom(
+      this.http.post<{ documentName: string; chunkCount: number }>(
+        `${this.baseUrl}/rag/upload`,
+        form
+      )
+    );
+  }
+
+  /** Ask a question about the uploaded document. */
+  ragAsk(question: string): Promise<{ answer: string; sources: string[] }> {
+    return firstValueFrom(
+      this.http.post<{ answer: string; sources: string[] }>(
+        `${this.baseUrl}/rag/ask`,
+        { question }
+      )
+    );
+  }
 }
