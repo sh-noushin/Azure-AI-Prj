@@ -26,6 +26,12 @@ export interface VoiceOption {
   label: string;
 }
 
+/** A language the Translator can translate into. */
+export interface LanguageOption {
+  code: string;
+  label: string;
+}
+
 /** One place for every call to the C# API. */
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -98,6 +104,21 @@ export class ApiService {
       this.http.post<{ text: string; language: string }>(
         `${this.baseUrl}/speech/transcribe?language=${language}`,
         form
+      )
+    );
+  }
+
+  /** The languages available for translation. */
+  translateLanguages(): Promise<LanguageOption[]> {
+    return firstValueFrom(this.http.get<LanguageOption[]>(`${this.baseUrl}/translate/languages`));
+  }
+
+  /** Translate a text; the source language is detected automatically. */
+  translate(text: string, to: string): Promise<{ text: string; detectedLanguage: string }> {
+    return firstValueFrom(
+      this.http.post<{ text: string; detectedLanguage: string }>(
+        `${this.baseUrl}/translate`,
+        { text, to }
       )
     );
   }

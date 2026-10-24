@@ -1,0 +1,23 @@
+<app-feature-card
+  title="Übersetzen"
+  hint="Der Translator erkennt die Ausgangssprache selbst. Wählen Sie nur die Zielsprache.">
+
+  <textarea rows="3" [(ngModel)]="text" placeholder="Text eingeben …"></textarea>
+
+  <select [(ngModel)]="target">
+    @for (language of languages(); track language.code) {
+      <option [value]="language.code">{{ language.label }}</option>
+    }
+  </select>
+
+  <button (click)="translate()" [disabled]="loading() || !text().trim()">
+    {{ loading() ? 'Einen Moment …' : 'Übersetzen' }}
+  </button>
+
+  <app-error-message [message]="error()" />
+  <app-answer-box label="Übersetzung" [text]="result()" />
+
+  @if (detected()) {
+    <p class="hint">Erkannte Ausgangssprache: <strong>{{ detected() }}</strong></p>
+  }
+</app-feature-card>

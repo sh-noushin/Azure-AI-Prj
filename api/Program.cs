@@ -18,6 +18,8 @@ builder.Services.AddSingleton<RagService>();
 builder.Services.AddSingleton<LanguageService>();
 builder.Services.AddSingleton<VisionService>();
 builder.Services.AddSingleton<SpeechService>();
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<TranslationService>();
 
 // ---------- let the Angular dev server call us ----------
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
@@ -33,5 +35,6 @@ app.MapRag();
 app.MapLanguage();
 app.MapVision();
 app.MapSpeech();
+app.MapTranslation();
 
 app.Run();

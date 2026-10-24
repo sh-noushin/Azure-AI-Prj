@@ -4,6 +4,7 @@ import { Embeddings } from './embeddings/embeddings';
 import { Language } from './language/language';
 import { Rag } from './rag/rag';
 import { Speech } from './speech/speech';
+import { Translate } from './translate/translate';
 import { Vision } from './vision/vision';
 
 export const routes: Routes = [
@@ -14,4 +15,5 @@ export const routes: Routes = [
   { path: 'language', component: Language },
   { path: 'vision', component: Vision },
   { path: 'speech', component: Speech },
+  { path: 'translate', component: Translate },
 ];
