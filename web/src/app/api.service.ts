@@ -20,6 +20,12 @@ export interface VisionAnalysis {
   tags: { name: string; confidence: number }[];
 }
 
+/** A voice the Speech service can use. */
+export interface VoiceOption {
+  id: string;
+  label: string;
+}
+
 /** One place for every call to the C# API. */
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -69,6 +75,31 @@ export class ApiService {
     form.append('file', file);
 
     return firstValueFrom(this.http.post<VisionAnalysis>(`${this.baseUrl}/vision`, form));
+  }
+
+  /** The voices available for reading text out loud. */
+  voices(): Promise<VoiceOption[]> {
+    return firstValueFrom(this.http.get<VoiceOption[]>(`${this.baseUrl}/speech/voices`));
+  }
+
+  /** Read a text out loud and return the audio. */
+  speak(text: string, voice: string): Promise<Blob> {
+    return firstValueFrom(
+      this.http.post(`${this.baseUrl}/speech/speak`, { text, voice }, { responseType: 'blob' })
+    );
+  }
+
+  /** Write down what is said in a WAV file. */
+  transcribe(file: File, language: string): Promise<{ text: string; language: string }> {
+    const form = new FormData();
+    form.append('file', file);
+
+    return firstValueFrom(
+      this.http.post<{ text: string; language: string }>(
+        `${this.baseUrl}/speech/transcribe?language=${language}`,
+        form
+      )
+    );
   }
 
   /** Ask a question about the uploaded document. */

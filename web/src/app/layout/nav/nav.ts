@@ -14,5 +14,6 @@ export class Nav {
     { path: '/rag', label: 'Eigenes Dokument' },
     { path: '/language', label: 'Textanalyse' },
     { path: '/vision', label: 'Bildanalyse' },
+    { path: '/speech', label: 'Sprache' },
   ];
 }

@@ -1,0 +1,45 @@
+<app-feature-card
+  title="Text vorlesen"
+  hint="Der Speech-Dienst spricht Ihren Text mit einer von mehreren Stimmen.">
+
+  <textarea rows="3" [(ngModel)]="text" placeholder="Was soll vorgelesen werden?"></textarea>
+
+  <select [(ngModel)]="voice">
+    @for (option of voices(); track option.id) {
+      <option [value]="option.id">{{ option.label }}</option>
+    }
+  </select>
+
+  <button (click)="speak()" [disabled]="speaking() || !text().trim()">
+    {{ speaking() ? 'Einen Moment …' : 'Vorlesen' }}
+  </button>
+
+  @if (audioUrl()) {
+    <audio class="player" [src]="audioUrl()" controls autoplay></audio>
+  }
+</app-feature-card>
+
+<app-feature-card
+  title="Sprache erkennen"
+  hint="Laden Sie eine WAV-Datei hoch. Der Speech-Dienst schreibt auf, was gesagt wurde.">
+
+  <select [(ngModel)]="language">
+    <option value="de-DE">Deutsch</option>
+    <option value="en-US">English</option>
+  </select>
+
+  <input type="file" accept=".wav,audio/wav" (change)="transcribe($event)" [disabled]="transcribing()" />
+
+  @if (transcribing()) {
+    <p class="hint">Einen Moment …</p>
+  }
+
+  @if (transcript()) {
+    <div class="answer">
+      <h3>Erkannter Text</h3>
+      <p>{{ transcript() }}</p>
+    </div>
+  }
+</app-feature-card>
+
+<app-error-message [message]="error()" />

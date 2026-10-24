@@ -161,3 +161,22 @@ input[type='file'] {
   border: 1px solid #e3e5ea;
   border-radius: 0.5rem;
 }
+
+select {
+  padding: 0.55rem;
+  margin: 0 0.5rem 0.6rem 0;
+  font: inherit;
+  border: 1px solid #ccd0d9;
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+.player {
+  display: block;
+  width: 100%;
+  margin-top: 0.9rem;
+}
+
+app-feature-card + app-feature-card .card {
+  margin-top: 1rem;
+}
