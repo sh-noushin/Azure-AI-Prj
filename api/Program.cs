@@ -36,5 +36,6 @@ app.MapLanguage();
 app.MapVision();
 app.MapSpeech();
 app.MapTranslation();
+app.MapVoice();
 
 app.Run();

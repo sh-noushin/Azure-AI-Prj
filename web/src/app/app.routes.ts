@@ -6,6 +6,7 @@ import { Rag } from './rag/rag';
 import { Speech } from './speech/speech';
 import { Translate } from './translate/translate';
 import { Vision } from './vision/vision';
+import { Voice } from './voice/voice';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'chat', pathMatch: 'full' },
@@ -16,4 +17,5 @@ export const routes: Routes = [
   { path: 'vision', component: Vision },
   { path: 'speech', component: Speech },
   { path: 'translate', component: Translate },
+  { path: 'voice', component: Voice },
 ];

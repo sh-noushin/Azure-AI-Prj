@@ -1,0 +1,33 @@
+<app-feature-card
+  title="Sprachassistent"
+  hint="Drücken Sie Aufnehmen, stellen Sie eine Frage und hören Sie die Antwort. Drei Dienste in einem Aufruf: Spracherkennung, gpt-5-mini und Sprachausgabe.">
+
+  @if (!recording()) {
+    <button (click)="start()" [disabled]="thinking()">
+      {{ thinking() ? 'Einen Moment …' : 'Aufnehmen' }}
+    </button>
+  } @else {
+    <button class="stop" (click)="stop()">Fertig</button>
+    <p class="hint recording">Aufnahme läuft …</p>
+  }
+
+  <app-error-message [message]="error()" />
+
+  @if (question()) {
+    <div class="answer">
+      <h3>Verstanden</h3>
+      <p>{{ question() }}</p>
+    </div>
+  }
+
+  @if (answer()) {
+    <div class="answer">
+      <h3>Antwort</h3>
+      <p>{{ answer() }}</p>
+
+      @if (audioUrl()) {
+        <audio class="player" [src]="audioUrl()" controls autoplay></audio>
+      }
+    </div>
+  }
+</app-feature-card>

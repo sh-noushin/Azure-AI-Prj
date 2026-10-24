@@ -180,3 +180,13 @@ select {
 app-feature-card + app-feature-card .card {
   margin-top: 1rem;
 }
+
+button.stop {
+  background: #d4453f;
+}
+
+.recording {
+  display: inline-block;
+  margin-left: 0.8rem;
+  color: #d4453f;
+}

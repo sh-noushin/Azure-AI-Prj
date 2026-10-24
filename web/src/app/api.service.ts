@@ -123,6 +123,19 @@ export class ApiService {
     );
   }
 
+  /** Send a spoken question and get back the answer, in text and as audio. */
+  voiceAsk(wav: Blob): Promise<{ question: string; answer: string; audioBase64: string }> {
+    const form = new FormData();
+    form.append('file', wav, 'frage.wav');
+
+    return firstValueFrom(
+      this.http.post<{ question: string; answer: string; audioBase64: string }>(
+        `${this.baseUrl}/voice/ask?language=de-DE&voice=de-DE-KatjaNeural`,
+        form
+      )
+    );
+  }
+
   /** Ask a question about the uploaded document. */
   ragAsk(question: string): Promise<{ answer: string; sources: string[] }> {
     return firstValueFrom(

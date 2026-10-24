@@ -16,5 +16,6 @@ export class Nav {
     { path: '/vision', label: 'Bildanalyse' },
     { path: '/speech', label: 'Sprache' },
     { path: '/translate', label: 'Übersetzen' },
+    { path: '/voice', label: 'Sprachassistent' },
   ];
 }
