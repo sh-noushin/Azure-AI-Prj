@@ -15,6 +15,7 @@ builder.Services.AddSingleton(settings);
 builder.Services.AddSingleton<ChatService>();
 builder.Services.AddSingleton<EmbeddingService>();
 builder.Services.AddSingleton<RagService>();
+builder.Services.AddSingleton<LanguageService>();
 
 // ---------- let the Angular dev server call us ----------
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
@@ -27,5 +28,6 @@ app.UseCors();
 app.MapChat();
 app.MapEmbeddings();
 app.MapRag();
+app.MapLanguage();
 
 app.Run();

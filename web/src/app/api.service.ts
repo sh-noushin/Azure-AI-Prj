@@ -2,6 +2,17 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
+/** What the Language page gets back. */
+export interface TextAnalysis {
+  sentiment: string;
+  positive: number;
+  neutral: number;
+  negative: number;
+  language: string;
+  keyPhrases: string[];
+  entities: { text: string; category: string }[];
+}
+
 /** One place for every call to the C# API. */
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -35,6 +46,13 @@ export class ApiService {
         `${this.baseUrl}/rag/upload`,
         form
       )
+    );
+  }
+
+  /** Analyse a text: mood, language, topics and names. */
+  language(text: string): Promise<TextAnalysis> {
+    return firstValueFrom(
+      this.http.post<TextAnalysis>(`${this.baseUrl}/language`, { text })
     );
   }
 

@@ -120,3 +120,35 @@ input[type='file'] {
   background: #f4f6fa;
   border-radius: 0.4rem;
 }
+
+.bar {
+  display: flex;
+}
+
+.bar span.positive { background: #1a9e5c; }
+.bar span.neutral  { background: #b7bdc9; }
+.bar span.negative { background: #d4453f; }
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.tag {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.85rem;
+  background: #eceef3;
+  border-radius: 999px;
+}
+
+.tag em {
+  color: #5b5f6b;
+  font-style: normal;
+  font-size: 0.75rem;
+}
+
+.answer h3 {
+  margin-top: 1.1rem;
+}

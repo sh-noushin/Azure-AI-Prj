@@ -12,5 +12,6 @@ export class Nav {
     { path: '/chat', label: 'Chat' },
     { path: '/embeddings', label: 'Ähnlichkeit' },
     { path: '/rag', label: 'Eigenes Dokument' },
+    { path: '/language', label: 'Textanalyse' },
   ];
 }

@@ -1,0 +1,50 @@
+<app-feature-card
+  title="Textanalyse"
+  hint="Der Language-Dienst erkennt Stimmung, Sprache, Hauptthemen und Namen im Text.">
+
+  <textarea
+    rows="4"
+    placeholder="Text eingeben …"
+    [(ngModel)]="text"
+    (keydown.control.enter)="analyse()"></textarea>
+
+  <button (click)="analyse()" [disabled]="loading() || !text().trim()">
+    {{ loading() ? 'Einen Moment …' : 'Analysieren' }}
+  </button>
+
+  <app-error-message [message]="error()" />
+
+  @if (result(); as r) {
+    <div class="answer">
+      <h3>Stimmung</h3>
+      <p><strong>{{ sentimentLabel() }}</strong> &middot; erkannte Sprache: {{ r.language }}</p>
+
+      <div class="bar">
+        <span class="positive" [style.width.%]="r.positive * 100"></span>
+        <span class="neutral" [style.width.%]="r.neutral * 100"></span>
+        <span class="negative" [style.width.%]="r.negative * 100"></span>
+      </div>
+      <p class="hint">
+        positiv {{ r.positive }} &middot; neutral {{ r.neutral }} &middot; negativ {{ r.negative }}
+      </p>
+
+      <h3>Hauptthemen</h3>
+      <div class="tags">
+        @for (phrase of r.keyPhrases; track phrase) {
+          <span class="tag">{{ phrase }}</span>
+        } @empty {
+          <p class="hint">Keine gefunden.</p>
+        }
+      </div>
+
+      <h3>Erkannte Begriffe</h3>
+      <div class="tags">
+        @for (entity of r.entities; track $index) {
+          <span class="tag">{{ entity.text }} <em>{{ entity.category }}</em></span>
+        } @empty {
+          <p class="hint">Keine gefunden.</p>
+        }
+      </div>
+    </div>
+  }
+</app-feature-card>
