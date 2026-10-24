@@ -441,6 +441,3 @@ web/.env.*
 appsettings.Development.json
 appsettings.*.local.json
 secrets.json
-
-# ---- docker ----
-.env
