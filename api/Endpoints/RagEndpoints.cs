@@ -7,7 +7,7 @@ namespace AiApp.Endpoints;
 public static class RagEndpoints
 {
     /// <summary>Biggest file we accept, to keep embedding costs small.</summary>
-    private const long MaxFileSize = 200 * 1024;
+    private const long MaxFileSize = 4 * 1024 * 1024;
 
     public static void MapRag(this WebApplication app)
     {
@@ -20,11 +20,25 @@ public static class RagEndpoints
 
             if (file.Length > MaxFileSize)
             {
-                return Results.BadRequest(new { error = "Die Datei ist zu gross (max. 200 KB)." });
+                return Results.BadRequest(new { error = "Die Datei ist zu gross (max. 4 MB)." });
             }
 
-            using var reader = new StreamReader(file.OpenReadStream());
-            string content = await reader.ReadToEndAsync();
+            if (!DocumentReader.IsSupported(file.FileName))
+            {
+                return Results.BadRequest(new { error = "Bitte eine PDF-, TXT- oder Markdown-Datei wählen." });
+            }
+
+            using Stream upload = file.OpenReadStream();
+            string content = await DocumentReader.ReadAsync(upload, file.FileName);
+
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                return Results.BadRequest(new
+                {
+                    error = "Aus der Datei liess sich kein Text lesen. "
+                        + "Gescannte PDFs enthalten nur Bilder: probieren Sie die Bildanalyse."
+                });
+            }
 
             int pieces = await rag.LoadAsync(file.FileName, content);
             return Results.Ok(new RagStatus(file.FileName, pieces));

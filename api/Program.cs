@@ -22,8 +22,12 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<TranslationService>();
 
 // ---------- let the Angular dev server call us ----------
-builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
-    policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
+// Only needed while developing. In Docker the browser talks to nginx, which
+// forwards /api internally, so there is no cross-origin request at all.
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy
+    .WithOrigins("http://localhost:4300", "http://localhost:4200")
+    .AllowAnyHeader()
+    .AllowAnyMethod()));
 
 var app = builder.Build();
 app.UseCors();
@@ -33,7 +37,7 @@ app.UseCors();
 app.MapGet("/", () => Results.Ok(new
 {
     name = "Azure AI Playground API",
-    website = "http://localhost:4200",
+    website = "http://localhost:4300",
     endpoints = new[]
     {
         "POST /api/chat",

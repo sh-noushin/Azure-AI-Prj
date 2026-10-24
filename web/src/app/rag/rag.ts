@@ -40,8 +40,10 @@ export class Rag {
       const status = await this.api.ragUpload(file);
       this.documentName.set(status.documentName);
       this.chunkCount.set(status.chunkCount);
-    } catch {
-      this.error.set('Die Datei konnte nicht gelesen werden (max. 200 KB, nur Text).');
+    } catch (problem: unknown) {
+      // The API explains what went wrong; show that rather than a generic message.
+      const message = (problem as { error?: { error?: string } })?.error?.error;
+      this.error.set(message ?? 'Die Datei konnte nicht gelesen werden (PDF, TXT oder MD, max. 4 MB).');
     } finally {
       this.uploading.set(false);
     }

@@ -20,8 +20,9 @@ services:
   web:
     build: ./web
     ports:
-      # Change the first number if 8088 is taken on your machine.
-      - "${WEB_PORT:-8088}:80"
+      # Same port as the dev server, so the URL is the same either way.
+      # Override with WEB_PORT in .env if something else uses it.
+      - "${WEB_PORT:-4300}:80"
     depends_on:
       - api
     restart: unless-stopped

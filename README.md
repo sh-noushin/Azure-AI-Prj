@@ -32,14 +32,14 @@ cp .env.example .env     # then fill in your Azure values
 docker compose up
 ```
 
-Open <http://localhost:8088>. Stop it with `Ctrl+C`, or `docker compose down`.
+Open <http://localhost:4300>. Stop it with `Ctrl+C`, or `docker compose down`.
 
 `.env` needs an **API key** from the Azure portal (your AI Services resource,
 *Keys and Endpoint*) together with the two endpoints and your deployment names.
 A key is used here rather than `az login`, because a container has no login
 session of its own. `.env` is git-ignored, so the key stays on your machine.
 
-If port 8088 is taken, set `WEB_PORT=9090` in `.env`.
+If port 4300 is taken, set `WEB_PORT=4400` in `.env`.
 
 ## Running it without Docker
 
@@ -74,10 +74,10 @@ Start the frontend in a second terminal:
 ```bash
 cd web
 npm install
-npx ng serve        # http://localhost:4200
+npx ng serve        # http://localhost:4300
 ```
 
-Open http://localhost:4200.
+Open http://localhost:4300.
 
 ## How the two ways authenticate
 
@@ -89,6 +89,26 @@ Open http://localhost:4200.
 
 Every service checks the same setting, so the switch happens in one place per
 service and no code changes between the two.
+
+## Ports
+
+Change any of these if something else on your machine already uses them.
+
+The website answers on **<http://localhost:4300>** either way, so the URL is the
+same whether you run it with Docker or with the dev server.
+
+| What | Port | Where to change it |
+|---|---|---|
+| Website, Docker | 4300 | `WEB_PORT` in `.env` |
+| Website, dev server | 4300 | `web/angular.json`, under `serve.options.port` &mdash; or `npx ng serve --port 4400` for one run |
+| API, dev | 5080 | `api/Properties/launchSettings.json` **and** `web/proxy.conf.json`; both must match |
+| API, Docker | not published | nginx reaches it inside the Docker network, so nothing to change |
+
+Running the dev server and Docker at the same time means giving one of them a
+different port, since they would otherwise both want 4300.
+
+The API port is not exposed by Docker at all: only the website is reachable
+from outside, and it forwards `/api` to the API container internally.
 
 ## Settings
 

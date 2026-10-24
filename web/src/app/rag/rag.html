@@ -1,8 +1,8 @@
 <app-feature-card
   title="Eigenes Dokument"
-  hint="Laden Sie eine Text- oder Markdown-Datei hoch. Antworten kommen ausschliesslich aus dieser Datei.">
+  hint="Laden Sie ein PDF, eine Text- oder Markdown-Datei hoch. Antworten kommen ausschliesslich aus dieser Datei.">
 
-  <input type="file" accept=".txt,.md" (change)="upload($event)" [disabled]="uploading()" />
+  <input type="file" accept=".pdf,.txt,.md,.markdown" (change)="upload($event)" [disabled]="uploading()" />
 
   @if (documentName()) {
     <p class="hint">
