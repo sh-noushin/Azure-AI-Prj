@@ -15,7 +15,7 @@ public static class ChatEndpoints
                 return Results.BadRequest(new { error = "Bitte eine Frage eingeben." });
             }
 
-            string answer = await chat.AskAsync(request.Question);
+            string answer = await chat.ContinueAsync(request.Question, request.History ?? []);
             return Results.Ok(new ChatResponse(answer));
         });
     }

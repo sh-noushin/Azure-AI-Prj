@@ -1,0 +1,29 @@
+<aside>
+  <div class="brand">
+    <span class="logo">◆</span>
+    <span class="name">Azure AI</span>
+  </div>
+
+  <nav>
+    @for (item of items; track item.path) {
+      <a [routerLink]="item.path" routerLinkActive="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          @for (d of item.icon; track $index) {
+            <path [attr.d]="d" />
+          }
+        </svg>
+
+        <span class="text">
+          <span class="label">{{ item.label }}</span>
+          <span class="service">{{ item.service }}</span>
+        </span>
+      </a>
+    }
+  </nav>
+
+  <footer>
+    <span class="dot"></span>
+    Sweden Central
+  </footer>
+</aside>

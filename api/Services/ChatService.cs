@@ -1,4 +1,5 @@
 using AiApp.Configuration;
+using AiApp.Models;
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using OpenAI.Chat;
@@ -20,6 +21,27 @@ public class ChatService
     public async Task<string> AskAsync(string question)
     {
         var result = await _chat.CompleteChatAsync(new UserChatMessage(question));
+        return result.Value.Content[0].Text;
+    }
+
+    /// <summary>
+    /// Continues a conversation. The earlier turns are sent along every time, because the
+    /// model keeps no memory of its own between calls.
+    /// </summary>
+    public async Task<string> ContinueAsync(string question, IReadOnlyList<ChatTurn> history)
+    {
+        List<ChatMessage> messages = [];
+
+        foreach (ChatTurn turn in history)
+        {
+            messages.Add(turn.Role == "assistant"
+                ? new AssistantChatMessage(turn.Text)
+                : new UserChatMessage(turn.Text));
+        }
+
+        messages.Add(new UserChatMessage(question));
+
+        var result = await _chat.CompleteChatAsync(messages);
         return result.Value.Content[0].Text;
     }
 

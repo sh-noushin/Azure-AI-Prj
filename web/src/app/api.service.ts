@@ -32,16 +32,22 @@ export interface LanguageOption {
   label: string;
 }
 
+/** One message in a conversation. */
+export interface ChatTurn {
+  role: 'user' | 'assistant';
+  text: string;
+}
+
 /** One place for every call to the C# API. */
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private http = inject(HttpClient);
   private baseUrl = '/api';
 
-  /** Ask the chat model a question. */
-  chat(question: string): Promise<{ answer: string }> {
+  /** Ask the chat model a question, sending the conversation so far as context. */
+  chat(question: string, history: ChatTurn[] = []): Promise<{ answer: string }> {
     return firstValueFrom(
-      this.http.post<{ answer: string }>(`${this.baseUrl}/chat`, { question })
+      this.http.post<{ answer: string }>(`${this.baseUrl}/chat`, { question, history })
     );
   }
 

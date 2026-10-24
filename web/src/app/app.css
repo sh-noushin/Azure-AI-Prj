@@ -1,32 +1,35 @@
 :host {
   display: block;
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: 1.5rem;
-  color: #1b1b1f;
+  height: 100%;
 }
 
-header h1 {
-  font-size: 1.4rem;
-  margin: 0 0 0.75rem;
+.layout {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0.4rem 0.8rem;
-  margin-right: 0.4rem;
-  border-radius: 0.5rem;
-  text-decoration: none;
-  color: #1b1b1f;
-  background: #eceef3;
+app-sidebar {
+  flex-shrink: 0;
 }
 
-nav a.active {
-  background: #0b5fff;
-  color: #fff;
-}
-
+/* The content area owns the rest of the host and scrolls by itself,
+   so the sidebar never moves and a page can pin things to the bottom. */
 main {
-  margin-top: 1.5rem;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@media (max-width: 820px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  /* The menu bar keeps its height; the page gets what is left. */
+  app-sidebar {
+    flex-shrink: 0;
+  }
 }

@@ -29,6 +29,24 @@ var app = builder.Build();
 app.UseCors();
 
 // ---------- endpoints (one per feature) ----------
+// A root page, so opening http://localhost:5080 in a browser is not a 404.
+app.MapGet("/", () => Results.Ok(new
+{
+    name = "Azure AI Playground API",
+    website = "http://localhost:4200",
+    endpoints = new[]
+    {
+        "POST /api/chat",
+        "POST /api/similarity",
+        "POST /api/rag/upload", "GET /api/rag/status", "POST /api/rag/ask",
+        "POST /api/language",
+        "POST /api/vision",
+        "GET /api/speech/voices", "POST /api/speech/speak", "POST /api/speech/transcribe",
+        "GET /api/translate/languages", "POST /api/translate",
+        "POST /api/voice/ask"
+    }
+}));
+
 app.MapChat();
 app.MapEmbeddings();
 app.MapRag();

@@ -1,9 +1,13 @@
-<section class="card">
-  <h2>{{ title() }}</h2>
+<section>
+  <header>
+    <h2>{{ title() }}</h2>
 
-  @if (hint()) {
-    <p class="hint">{{ hint() }}</p>
-  }
+    @if (hint()) {
+      <p class="subtitle">{{ hint() }}</p>
+    }
+  </header>
 
-  <ng-content />
+  <div class="panel">
+    <ng-content />
+  </div>
 </section>

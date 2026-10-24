@@ -1,17 +1,69 @@
-<app-feature-card
-  title="Chat"
-  hint="Stellen Sie eine Frage an das Modell gpt-5-mini.">
+<div class="chat">
+  <div class="messages" #scroller>
+    <div class="column">
+      @if (!messages().length) {
+        <div class="welcome">
+          <h2>Womit kann ich helfen?</h2>
+          <p class="subtitle">Eine Unterhaltung mit dem Modell gpt-5-mini.</p>
 
-  <textarea
-    rows="3"
-    placeholder="Was ist eine digitale Signatur?"
-    [(ngModel)]="question"
-    (keydown.control.enter)="ask()"></textarea>
+          <div class="examples">
+            @for (example of examples; track example) {
+              <button class="example" (click)="use(example)">{{ example }}</button>
+            }
+          </div>
+        </div>
+      }
 
-  <button (click)="ask()" [disabled]="loading() || !question().trim()">
-    {{ loading() ? 'Einen Moment …' : 'Fragen' }}
-  </button>
+      @for (message of messages(); track $index) {
+        @if (message.role === 'user') {
+          <div class="row user">
+            <div class="bubble">{{ message.text }}</div>
+          </div>
+        } @else {
+          <div class="row assistant">
+            <span class="avatar">◆</span>
+            <div class="text">{{ message.text }}</div>
+          </div>
+        }
+      }
 
-  <app-error-message [message]="error()" />
-  <app-answer-box [text]="answer()" />
-</app-feature-card>
+      @if (loading()) {
+        <div class="row assistant">
+          <span class="avatar">◆</span>
+          <div class="typing"><span></span><span></span><span></span></div>
+        </div>
+      }
+
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      }
+    </div>
+  </div>
+
+  <div class="composer">
+    <div class="column">
+      <div class="box">
+        <textarea
+          rows="1"
+          placeholder="Frage an gpt-5-mini …"
+          [(ngModel)]="draft"
+          (keydown)="onKeydown($event)"></textarea>
+
+        <button class="send" (click)="send()" [disabled]="loading() || !draft().trim()" title="Senden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19V5" />
+            <path d="m5 12 7-7 7 7" />
+          </svg>
+        </button>
+      </div>
+
+      <p class="foot">
+        gpt-5-mini kann Fehler machen.
+        @if (messages().length) {
+          <button class="link" (click)="clear()">Unterhaltung löschen</button>
+        }
+      </p>
+    </div>
+  </div>
+</div>

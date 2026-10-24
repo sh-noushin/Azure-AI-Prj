@@ -2,8 +2,10 @@
   title="Ähnlichkeit"
   hint="text-embedding-3-small verwandelt Text in Zahlen. So lässt sich Bedeutung vergleichen, nicht nur Schreibweise.">
 
-  <input [(ngModel)]="first" placeholder="Erster Text" />
-  <input [(ngModel)]="second" placeholder="Zweiter Text" />
+  <div class="split">
+    <input [(ngModel)]="first" placeholder="Erster Text" />
+    <input [(ngModel)]="second" placeholder="Zweiter Text" />
+  </div>
 
   <button (click)="compare()" [disabled]="loading()">
     {{ loading() ? 'Einen Moment …' : 'Vergleichen' }}
